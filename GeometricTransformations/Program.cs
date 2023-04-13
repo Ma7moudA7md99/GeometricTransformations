@@ -31,6 +31,12 @@ namespace GeometricTransformations
             if (num == 1)
             {
                 translate(point);
+            } else if (num == 2)
+            {
+                scalling(point);
+            } else if (num == 3)
+            {
+                rotation(point);
             }
         }
         static int[] enterVlas() {
@@ -41,30 +47,30 @@ namespace GeometricTransformations
             y = Convert.ToInt32(Console.ReadLine());
             return new int[] { x, y };
         }
-        static void displayResult(int[,] point)
+        static void displayResult(double[,] point)
         {
             Console.WriteLine();
-            Console.WriteLine("The new Point is : " + "( " + point[0, 0] + " , " + point[1, 0] + " )");
+            Console.WriteLine("The new Point is : " + "( " + Math.Round(point[0, 0], 2) + " , " + Math.Round(point[1, 0], 2) + " )");
         }
-        static int[,] translate(int[] point)
+        static double[,] translate(int[] point)
         {
-            int tx, ty;
+            double tx, ty;
             Console.WriteLine("Enter Tx value:  ");
-            tx = Convert.ToInt32(Console.ReadLine());
+            tx = Convert.ToDouble(Console.ReadLine());
             Console.WriteLine("Enter Ty value:  ");
-            ty = Convert.ToInt32(Console.ReadLine());
+            ty = Convert.ToDouble(Console.ReadLine());
 
-            int[,] matrix = { 
+            double[,] matrix = { 
                 { 1, 0, tx },
                 { 0, 1, ty },
                 { 0, 0, 1 } 
             };
-            int[,] pointMatrix = { 
+            double[,] pointMatrix = { 
                 { point[0] },
                 { point[1] },
                 { 1 }
             };
-            int[,] newPoint = new int[3, 1];
+            double[,] newPoint = new double[3, 1];
 
             newPoint[0, 0] = 
                 (matrix[0, 0] * pointMatrix[0, 0]) + 
@@ -76,6 +82,86 @@ namespace GeometricTransformations
                 (matrix[1, 2] * pointMatrix[2, 0]);
             newPoint[2, 0] = 1;
             
+            displayResult(newPoint);
+            return newPoint;
+        }
+        static double[,] scalling(int[] point)
+        {
+            double sx, sy;
+            Console.WriteLine("Enter Sx value:  ");
+            sx = Convert.ToDouble(Console.ReadLine());
+            Console.WriteLine("Enter Sy value:  ");
+            sy = Convert.ToDouble(Console.ReadLine());
+            double[,] matrix = {
+                { sx, 0, 0 },
+                { 0, sy, 0 },
+                { 0, 0, 1 }
+            };
+            double[,] pointMatrix = {
+                { point[0] },
+                { point[1] },
+                { 1 }
+            };
+
+            double[,] newPoint = new double[3, 1];
+
+            newPoint[0, 0] =
+                (matrix[0, 0] * pointMatrix[0, 0]) +
+                (matrix[0, 1] * pointMatrix[1, 0]) +
+                (matrix[0, 2] * pointMatrix[2, 0]);
+            newPoint[1, 0] =
+                (matrix[1, 0] * pointMatrix[0, 0]) +
+                (matrix[1, 1] * pointMatrix[1, 0]) +
+                (matrix[1, 2] * pointMatrix[2, 0]);
+            newPoint[2, 0] = 1;
+
+            displayResult(newPoint);
+            return newPoint;
+        }
+        static double[,] rotation(int[] point)
+        {
+            double angle, degrees, sinAngle, cosAngle;
+            Console.WriteLine("Enter Angel value in degrees:  ");
+            angle = Convert.ToDouble(Console.ReadLine());
+            Console.WriteLine("The Rotation in ...\n" +
+                "1- Counter Clockwise\n" +
+                "2- Clockwise");
+            int direction = Convert.ToInt32(Console.ReadLine());
+            degrees = (double)(Math.PI * angle / 180.0);
+            sinAngle = Math.Sin(degrees);
+            cosAngle = Math.Cos(degrees);
+            //Console.WriteLine("Enter Sy value:  ");
+            //sy = Convert.ToInt32(Console.ReadLine());
+            double[,] matrixCounter = {
+                { cosAngle, (-sinAngle), 0 },
+                { sinAngle, cosAngle, 0 },
+                { 0, 0, 1 }
+            };
+            double[,] matrixClock = {
+                { cosAngle, sinAngle, 0 },
+                { (-sinAngle), cosAngle, 0 },
+                { 0, 0, 1 }
+            };
+            double[,] pointMatrix = {
+                { point[0] },
+                { point[1] },
+                { 1 }
+            };
+
+            double[,] newPoint = new double[3, 1];
+
+            if(direction == 1) {
+                newPoint[0, 0] =
+                    (matrixCounter[0, 0] * pointMatrix[0, 0]) +
+                    (matrixCounter[0, 1] * pointMatrix[1, 0]) +
+                    (matrixCounter[0, 2] * pointMatrix[2, 0]);
+                newPoint[1, 0] =
+                    (matrixCounter[1, 0] * pointMatrix[0, 0]) +
+                    (matrixCounter[1, 1] * pointMatrix[1, 0]) +
+                    (matrixCounter[1, 2] * pointMatrix[2, 0]);
+                newPoint[2, 0] = 1;
+            }
+
             displayResult(newPoint);
             return newPoint;
         }
