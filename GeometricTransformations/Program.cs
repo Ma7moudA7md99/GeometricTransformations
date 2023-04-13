@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
-using System.Security.Cryptography.X509Certificates;
+using System.Security.Cryptography.X509Certificates; 
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,11 +13,12 @@ namespace GeometricTransformations
     {
         static void Main(string[] args)
         {
-            choseop();
+            int[] point = enterVlas();
+            choseop(point);
             Console.ReadKey();
             
         }
-        static void choseop()
+        static void choseop(int[] point)
         {
             Console.WriteLine("1- Translation \n" +
                 "2- Scalling \n" +
@@ -29,17 +30,23 @@ namespace GeometricTransformations
             int num = Convert.ToInt32(Console.ReadLine());
             if (num == 1)
             {
+                translate(point);
             }
         }
-        static int enterVlas() {
+        static int[] enterVlas() {
             int x, y;
             Console.WriteLine("Enter X value:  ");
             x = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine("Enter Y value:  ");
             y = Convert.ToInt32(Console.ReadLine());
-            return x;
+            return new int[] { x, y };
         }
-        public int translate(int x, int y)
+        static void displayResult(int[,] point)
+        {
+            Console.WriteLine();
+            Console.WriteLine("The new Point is : " + "( " + point[0, 0] + " , " + point[1, 0] + " )");
+        }
+        static int[,] translate(int[] point)
         {
             int tx, ty;
             Console.WriteLine("Enter Tx value:  ");
@@ -47,22 +54,30 @@ namespace GeometricTransformations
             Console.WriteLine("Enter Ty value:  ");
             ty = Convert.ToInt32(Console.ReadLine());
 
-            int[][] matrix = { };
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    if (i == 0 && j == 2 || i == 1 && j == 2)
-                    {
-                        matrix[0][2] = tx;
-                        matrix[1][2] = ty;
-                    }
-                    matrix[i][j] = Convert.ToInt32(Console.ReadLine());
+            int[,] matrix = { 
+                { 1, 0, tx },
+                { 0, 1, ty },
+                { 0, 0, 1 } 
+            };
+            int[,] pointMatrix = { 
+                { point[0] },
+                { point[1] },
+                { 1 }
+            };
+            int[,] newPoint = new int[3, 1];
 
-                }
-
-            }
-            return 0;
+            newPoint[0, 0] = 
+                (matrix[0, 0] * pointMatrix[0, 0]) + 
+                (matrix[0, 1] * pointMatrix[1, 0]) + 
+                (matrix[0, 2] * pointMatrix[2, 0]);
+            newPoint[1, 0] =
+                (matrix[1, 0] * pointMatrix[0, 0]) +
+                (matrix[1, 1] * pointMatrix[1, 0]) +
+                (matrix[1, 2] * pointMatrix[2, 0]);
+            newPoint[2, 0] = 1;
+            
+            displayResult(newPoint);
+            return newPoint;
         }
     }
 }
