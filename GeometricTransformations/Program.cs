@@ -15,8 +15,19 @@ namespace GeometricTransformations
         {
             int[] point = enterVlas();
             choseop(point);
+            Console.WriteLine("Do another operation ?\n" +
+                "1- Yes\n" +
+                "2- No");
+            int decide = Convert.ToInt32(Console.ReadLine());
+            if (decide == 1)
+            {
+                Console.Clear();
+                point = enterVlas();
+                choseop(point );
+
+            };
             Console.ReadKey();
-            
+            if (decide == 2) ;
         }
         static void choseop(int[] point)
         {
@@ -37,6 +48,9 @@ namespace GeometricTransformations
             } else if (num == 3)
             {
                 rotation(point);
+            } else if(num == 5)
+            {
+                shearing(point);
             }
         }
         static int[] enterVlas() {
@@ -161,6 +175,39 @@ namespace GeometricTransformations
                     (matrixCounter[1, 2] * pointMatrix[2, 0]);
                 newPoint[2, 0] = 1;
             }
+
+            displayResult(newPoint);
+            return newPoint;
+        }
+        static double[,] shearing(int[] point)
+        {
+            double shx, shy;
+            Console.WriteLine("Enter Shx value:  ");
+            shx = Convert.ToDouble(Console.ReadLine());
+            Console.WriteLine("Enter Shy value:  ");
+            shy = Convert.ToDouble(Console.ReadLine());
+            double[,] matrix = {
+                { 1, shy, 0 },
+                { shx, 1, 0 },
+                { 0, 0, 1 }
+            };
+            double[,] pointMatrix = {
+                { point[0] },
+                { point[1] },
+                { 1 }
+            };
+
+            double[,] newPoint = new double[3, 1];
+
+            newPoint[0, 0] =
+                (matrix[0, 0] * pointMatrix[0, 0]) +
+                (matrix[0, 1] * pointMatrix[1, 0]) +
+                (matrix[0, 2] * pointMatrix[2, 0]);
+            newPoint[1, 0] =
+                (matrix[1, 0] * pointMatrix[0, 0]) +
+                (matrix[1, 1] * pointMatrix[1, 0]) +
+                (matrix[1, 2] * pointMatrix[2, 0]);
+            newPoint[2, 0] = 1;
 
             displayResult(newPoint);
             return newPoint;
