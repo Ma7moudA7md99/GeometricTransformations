@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates; 
 using System.Text;
 using System.Threading.Tasks;
@@ -23,11 +24,11 @@ namespace GeometricTransformations
             {
                 Console.Clear();
                 point = enterVlas();
-                choseop(point );
+                choseop(point);
 
             };
-            Console.ReadKey();
-            if (decide == 2) ;
+            if (decide == 2) Environment.Exit(0);
+            
         }
         static void choseop(int[] point)
         {
@@ -48,9 +49,18 @@ namespace GeometricTransformations
             } else if (num == 3)
             {
                 rotation(point);
+            } else if(num == 4)
+            {
+                reflection(point);
             } else if(num == 5)
             {
                 shearing(point);
+            } else
+            {
+                Console.WriteLine("Wrong Choice");
+                Console.WriteLine(" - - - - - - - - - - - - - - - - - - - - ");
+                choseop(point);
+
             }
         }
         static int[] enterVlas() {
@@ -176,6 +186,78 @@ namespace GeometricTransformations
                 newPoint[2, 0] = 1;
             }
 
+            displayResult(newPoint);
+            return newPoint;
+        }
+        static double[,] reflection(int[] point)
+        {
+            Console.WriteLine("The Reflection will be around\n" +
+                "1- X-axis\n" +
+                "2- Y-axis\n" +
+                "3- Origin point");
+
+            int decide = Convert.ToInt32(Console.ReadLine());
+
+            
+            double[,] xMatrix = {
+                { 1, 0, 0 },
+                { 0, -1, 0 },
+                { 0, 0, 1 }
+            };
+            double[,] yMatrix = {
+                { -1, 0, 0 },
+                { 0, 1, 0 },
+                { 0, 0, 1 }
+            };
+            double[,] originMatrix = {
+                { -1, 0, 0 },
+                { 0, -1, 0 },
+                { 0, 0, 1 }
+            };
+            double[,] pointMatrix = {
+                { point[0] },
+                { point[1] },
+                { 1 }
+            };
+
+            double[,] newPoint = new double[3, 1];
+
+            if (decide == 1)
+            {
+                newPoint[0, 0] =
+                (xMatrix[0, 0] * pointMatrix[0, 0]) +
+                (xMatrix[0, 1] * pointMatrix[1, 0]) +
+                (xMatrix[0, 2] * pointMatrix[2, 0]);
+                newPoint[1, 0] =
+                    (xMatrix[1, 0] * pointMatrix[0, 0]) +
+                    (xMatrix[1, 1] * pointMatrix[1, 0]) +
+                    (xMatrix[1, 2] * pointMatrix[2, 0]);
+                newPoint[2, 0] = 1;
+            }
+            if(decide == 2)
+            {
+                newPoint[0, 0] =
+                    (yMatrix[0, 0] * pointMatrix[0, 0]) +
+                    (yMatrix[0, 1] * pointMatrix[1, 0]) +
+                    (yMatrix[0, 2] * pointMatrix[2, 0]);
+                newPoint[1, 0] =
+                    (yMatrix[1, 0] * pointMatrix[0, 0]) +
+                    (yMatrix[1, 1] * pointMatrix[1, 0]) +
+                    (yMatrix[1, 2] * pointMatrix[2, 0]);
+                newPoint[2, 0] = 1;
+            }
+            if(decide == 3)
+            {
+                newPoint[0, 0] =
+                    (originMatrix[0, 0] * pointMatrix[0, 0]) +
+                    (originMatrix[0, 1] * pointMatrix[1, 0]) +
+                    (originMatrix[0, 2] * pointMatrix[2, 0]);
+                newPoint[1, 0] =
+                    (originMatrix[1, 0] * pointMatrix[0, 0]) +
+                    (originMatrix[1, 1] * pointMatrix[1, 0]) +
+                    (originMatrix[1, 2] * pointMatrix[2, 0]);
+                newPoint[2, 0] = 1;
+            }
             displayResult(newPoint);
             return newPoint;
         }
